@@ -13,7 +13,8 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   try {
-    res.status(200).json(books);
+    booksList =JSON.stringify(books, null, 2)
+    res.status(200).json(booksList);
 } catch (error) {
     res.status(500).json({ message: "Error fetching books", error: error.message });
 }
@@ -21,8 +22,15 @@ public_users.get('/',function (req, res) {
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let isbn = req.params.isbn;
+  let booksList = Object.values(books)
+  let book = booksList.find(b => b.isbn===isbn);
+  if (book) {
+    let bookdetails = JSON.stringify(book)
+    res.send("Book details for ISBN " + isbn + ":" + " " + bookdetails)
+  } else {
+    res.send("No book found for ISBN " + isbn)
+  }
  });
   
 // Get book details based on author
